@@ -93,6 +93,13 @@ function main() {
     }
     console.log("①准备确认购票");
 
+    //绝对坐标点击
+    click(ConfirmX, ConfirmY);
+    //文字查找按钮点击，避免未正确配置坐标导致的点击失败
+    if(text("确认").exists()){
+        text("确认").click();
+    }
+    
     //猛点，一直点到出现支付按钮为止
     for (let cnt = 1; cnt >= 0; cnt++) {
         if (isDebug) {
@@ -103,8 +110,8 @@ function main() {
         //绝对坐标点击
         click(ConfirmX, ConfirmY);
         //文字查找按钮点击，避免未正确配置坐标导致的点击失败
-        if(text("确认").exists()){
-            text("确认").click();
+        if(text("一键抢票").exists()){
+            text("一键抢票").click();
         }
         sleep(50);
         if (className("android.widget.Button").desc("提交订单").exists()) {
