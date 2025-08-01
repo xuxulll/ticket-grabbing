@@ -6,8 +6,8 @@ openConsole();
 console.setTitle("纷玩岛 go!", "#ff11ee00", 30);
 
 //确认选票坐标，建议配置（不配置时仍会寻找“确认”按钮进行点击，但可能会出现点击失败的情况）
-const ConfirmX = 779;
-const ConfirmY = 1824;
+const ConfirmX = 810;
+const ConfirmY = 2286;
 
 //是否在测试调试
 var isDebug = false;
@@ -19,7 +19,7 @@ main();
 
 //获取输入的抢票时间
 function getSellTime() {
-    var sellTime = rawInput("请输入抢票时间(按照默认格式)", "04-21 16:18");
+    var sellTime = rawInput("请输入抢票时间(按照默认格式)", "08-08 13:20");
     if (sellTime == null || sellTime.trim() == '') {
         alert("请输入抢票时间!");
         return getSellTime();
@@ -67,8 +67,6 @@ function main() {
         }
     }
 
-
-
     console.log("冲啊！！！");
     while (true) {
         var but1 = className("android.view.View").desc("立即预订").exists()
@@ -93,13 +91,6 @@ function main() {
     }
     console.log("①准备确认购票");
 
-    //绝对坐标点击
-    click(ConfirmX, ConfirmY);
-    //文字查找按钮点击，避免未正确配置坐标导致的点击失败
-    if(text("确认").exists()){
-        text("确认").click();
-    }
-    
     //猛点，一直点到出现支付按钮为止
     for (let cnt = 1; cnt >= 0; cnt++) {
         if (isDebug) {
@@ -110,8 +101,8 @@ function main() {
         //绝对坐标点击
         click(ConfirmX, ConfirmY);
         //文字查找按钮点击，避免未正确配置坐标导致的点击失败
-        if(text("一键抢票").exists()){
-            text("一键抢票").click();
+        if(text("确认").exists()){
+            text("确认").click();
         }
         sleep(50);
         if (className("android.widget.Button").desc("提交订单").exists()) {
@@ -123,28 +114,19 @@ function main() {
     }
     console.log("②准备确认支付");
 
-
-
     if (!isDebug) {
         //调试模式时不点击支付按钮
 
         for (let cnt = 1; cnt >= 0; cnt++) {
-            //直接猛点就完事了
-            if(className("android.widget.Button").desc("提交订单").exists()){
-                className("android.widget.Button").desc("提交订单").findOne().click();
-            }
-            if(descContains("重新选择").exists()){
-                descContains("重新选择").findOne().click();
-            }
-            if(textContains("重新选择").exists()){
-                textContains("重新选择").findOne().click();
-            }
-            if(className("android.widget.Button").desc("确认").exists()){
-                className("android.widget.Button").desc("确认").findOne().click();
+            //直接猛点就完事
+            //绝对坐标点击
+            click(ConfirmX, ConfirmY);
+            if(className("android.widget.Button").desc("一键抢票").exists()){
+                className("android.widget.Button").desc("一键抢票").findOne().click();
             }
             //睡眠，避免过快点击导致卡死
-            sleep(200);
-            if(descContains("确认并支付").exists() || textContains("确认并支付").exists()){
+            sleep(50);
+            if(descContains("去支付").exists() || textContains("去支付").exists()){
                 log("抢票成功啦！！！")
                 break
             }
